@@ -4,7 +4,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { supabase } from '../../lib/supabase';
+import { supabase, isSupabaseConfigured } from '../../lib/supabase';
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -16,6 +16,11 @@ export default function AdminLoginPage() {
 
   async function handleLogin(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+
+    if (!isSupabaseConfigured) {
+      setErrorMessage('Admin login is not configured yet. Supabase settings are missing.');
+      return;
+    }
 
     setLoading(true);
     setErrorMessage('');
