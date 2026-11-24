@@ -4,7 +4,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { supabase } from '../../../lib/supabase';
+import { supabase, isSupabaseConfigured } from '../../../lib/supabase';
 
 type Booking = {
   id: string;
@@ -50,6 +50,11 @@ export default function AdminDashboard() {
     let active = true;
 
     async function initialize() {
+      if (!isSupabaseConfigured) {
+        router.replace('/admin');
+        return;
+      }
+
       const { data } = await supabase.auth.getUser();
 
       if (!data.user) {
